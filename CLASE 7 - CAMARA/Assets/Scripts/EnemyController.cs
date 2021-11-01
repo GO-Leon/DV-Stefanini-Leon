@@ -4,45 +4,29 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    public float speedEnemy = 5.0f;
+    public float speedEnemy = 4.0f;
     public float liveEnemy = 7.0f;
-    bool isForward = true;
+    private GameObject player;
+    [SerializeField] private Vector3 enemyDistance = new Vector3(2, 0, 0);
+
+
     // Start is called before the first frame update
     void Start()
     {
-        Debug.DrawLine(transform.position, new Vector3(5, 0, 0), Color.red, 5f);
+        player = GameObject.Find("Player");
+
     }
     // Update is called once per frame
     void Update()
     {
-        if (isForward)
-        {
-            MoveEnemy(Vector3.forward);
-        }
-        else
-        {
-            MoveEnemy(Vector3.back);
-        }
+        ChasePlayer();
 
-        if (transform.position.x < 0f && !isForward)
-        {
-            isForward = true;
-        }
-
-        if (transform.position.x > 20f && isForward)
-        {
-            isForward = false;
-        }
-
-        liveEnemy -= Time.deltaTime;
-
-        if (liveEnemy <= 0)
-        {
-            Destroy(gameObject);
-        }
+   
     }
-    private void MoveEnemy(Vector3 direction)
+
+    private void ChasePlayer()
     {
-        transform.Translate(speedEnemy * Time.deltaTime * direction);
+        Vector3 direction = player.transform.position - transform.position - enemyDistance;
+        transform.position += speedEnemy * direction * Time.deltaTime;
     }
 }

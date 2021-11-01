@@ -6,9 +6,11 @@ public class PlayerController : MonoBehaviour
 {
     public int lifePlayer = 3;
     public string namePlayer = "Mr. Blue";
-    public float speedPlayer = 1f;
+    public float speedPlayer = 4.0f;
     public GameObject swordPlayer;
-    public Vector3 initPosition = new Vector3(4, 2, 1);
+    public Vector3 initPosition = new Vector3(4, 0, 1);
+    [SerializeField] private float rotationPlayer = 5.0f;
+    float cameraAxis;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +24,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
       Move();
+      RotatePlayer();
     }
 
     private void Move()
@@ -29,5 +32,11 @@ public class PlayerController : MonoBehaviour
         float ejeHorizontal = Input.GetAxisRaw("Horizontal");
         float ejeVertical = Input.GetAxisRaw("Vertical");
         transform.Translate(speedPlayer * Time.deltaTime * new Vector3(-ejeVertical, 0, ejeHorizontal));
+    }
+    private void RotatePlayer()
+    {
+        cameraAxis += Input.GetAxis("Mouse X");
+        Quaternion angle = Quaternion.Euler(0, cameraAxis, 0);
+        transform.localRotation = angle;
     }
 }
